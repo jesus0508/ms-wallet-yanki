@@ -6,14 +6,19 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class WalletYanki {
     private String id;
-    private BigDecimal saldo;
-    private String nuncelular;
-    private LocalDateTime fechregistry;
+    private BigDecimal balance;
+    private String phoneNumber;
+    private LocalDateTime createdAt;
+
+    public WalletYanki(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+        this.balance = BigDecimal.ZERO;
+        this.createdAt = LocalDateTime.now();
+    }
 }

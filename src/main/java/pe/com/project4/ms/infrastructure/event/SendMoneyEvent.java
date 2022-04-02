@@ -17,6 +17,4 @@ public class SendMoneyEvent {
     private BigDecimal amount;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime occurredAt;
-
-
 }

@@ -13,27 +13,26 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document("walletTransactions")
+@Document("walletAccounts")
 public class WalletYankiDao {
     @Id
     private String id;
-    private BigDecimal saldo;
-    private String nuncelular;
-    private LocalDateTime fechregistry;
-
+    private BigDecimal balance;
+    private String phoneNumber;
+    private LocalDateTime createdAt;
 
     public WalletYankiDao(WalletYanki walletYanki) {
         id = walletYanki.getId();
-        saldo = walletYanki.getSaldo();
-        nuncelular = walletYanki.getNuncelular();
-        fechregistry = walletYanki.getFechregistry();
+        balance = walletYanki.getBalance();
+        phoneNumber = walletYanki.getPhoneNumber();
+        createdAt = walletYanki.getCreatedAt();
     }
 
     public WalletYanki toWalletYanki() {
         WalletYanki walletYanki = new WalletYanki();
-        walletYanki.setSaldo(saldo);
-        walletYanki.setNuncelular(nuncelular);
-        walletYanki.setFechregistry(fechregistry);
+        walletYanki.setBalance(balance);
+        walletYanki.setPhoneNumber(phoneNumber);
+        walletYanki.setCreatedAt(createdAt);
         return walletYanki;
     }
 

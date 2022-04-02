@@ -12,12 +12,13 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 @Configuration
 public class WalletYankiRouter {
-    private static final String WALLET_HOLDERS = "/wallet-yanki";
-    private static final String WALLET_HOLDER = "/wallet-account";
-    private static final String WALLET_HOLDER1 = "/wallet-transaction";
+    private static final String WALLET_YANKI = "/wallet-yanki";
+    private static final String WALLET_HOLDER = WALLET_YANKI + "/account";
+    private static final String WALLET_HOLDER1 = WALLET_YANKI + "/transaction";
 
     @Bean
     public RouterFunction<ServerResponse> routes(WalletYankiHandler walletYankiHandler) {
-        return route(POST(WALLET_HOLDERS).and(accept(APPLICATION_JSON)), walletYankiHandler::postWalletYanki);
+        return route(POST(WALLET_HOLDER).and(accept(APPLICATION_JSON)), walletYankiHandler::postWalletYanki)
+                .andRoute(POST(WALLET_HOLDER1).and(accept(APPLICATION_JSON)), walletYankiHandler::postTransaction);
     }
 }
