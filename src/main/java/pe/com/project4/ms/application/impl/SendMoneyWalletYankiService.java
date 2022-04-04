@@ -6,12 +6,13 @@ import org.springframework.stereotype.Service;
 import pe.com.project4.ms.application.SendMoneyWalletYankiUseCase;
 import pe.com.project4.ms.application.repository.WalletYankiRepository;
 import pe.com.project4.ms.domain.WalletYanki;
+import pe.com.project4.ms.infrastructure.event.SendMoneyEvent;
+import pe.com.project4.ms.infrastructure.producer.WalletSendMoneyProducer;
 import pe.com.project4.ms.infrastructure.rest.request.SendMoneyRequest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.stream.Stream;
 
 @Service
@@ -20,6 +21,7 @@ import java.util.stream.Stream;
 public class SendMoneyWalletYankiService implements SendMoneyWalletYankiUseCase {
 
     private final WalletYankiRepository walletYankiRepository;
+    private final WalletSendMoneyProducer walletSendMoneyProducer;
 
     @Override
     public Mono<WalletYanki> sendMoney(SendMoneyRequest sendMoneyRequest) {
@@ -38,8 +40,10 @@ public class SendMoneyWalletYankiService implements SendMoneyWalletYankiUseCase 
             walletYankiSender.debitMoney(money);
             walletYankiReceiver.creditMoney(money);
             return Stream.of(walletYankiSender, walletYankiReceiver);
-        }).flatMapMany(walletYankis -> walletYankiRepository.saveAll(Flux.fromStream(walletYankis)))
-                .filter(walletYankis -> walletYankis.getPhoneNumber().equals(sendMoneyRequest.getWalletAccountSenderId()))
+        }).flatMapMany(walletYankis -> {
+            walletSendMoneyProducer.sendMoneyEvent(new SendMoneyEvent(sendMoneyRequest));
+            return walletYankiRepository.saveAll(Flux.fromStream(walletYankis));
+        }).filter(walletYankis -> walletYankis.getPhoneNumber().equals(sendMoneyRequest.getWalletAccountSenderId()))
                 .elementAt(0);
     }
 }
