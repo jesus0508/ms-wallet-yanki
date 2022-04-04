@@ -35,5 +35,14 @@ public class WalletYankiDao {
         walletYanki.setCreatedAt(createdAt);
         return walletYanki;
     }
+    public WalletYanki busquedaYanqui() {
+        WalletYanki walletYanki = new WalletYanki();
+        walletYanki.setId(id);
+        walletYanki.setBalance(balance);
+        walletYanki.setPhoneNumber(phoneNumber);
+        walletYanki.setCreatedAt(createdAt);
+
+        return walletYanki;
+    }
 
 }

@@ -14,7 +14,7 @@ public class WalletAccountCreatedProducer {
     private final KafkaTemplate<String, WalletAccountCreatedEvent> kafkaTemplate;
 
     public void sendAccountCreate(WalletAccountCreatedEvent walletAccountCreatedEvent) {
-        log.debug(" Producing message {}", walletAccountCreatedEvent.toString());
+        log.debug("==> Producing message {}", walletAccountCreatedEvent.toString());
         kafkaTemplate.send("WALLET-ACCOUNT-CREATED", walletAccountCreatedEvent);
     }
 }

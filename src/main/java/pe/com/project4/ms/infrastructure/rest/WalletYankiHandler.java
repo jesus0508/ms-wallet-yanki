@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import pe.com.project4.ms.application.impl.SaveWalletYankiService;
+import pe.com.project4.ms.application.repository.WalletYankiRepository;
 import pe.com.project4.ms.domain.WalletYanki;
+import pe.com.project4.ms.infrastructure.persistence.model.WalletYankiDao;
 import pe.com.project4.ms.infrastructure.rest.request.CreateAccountRequest;
 import reactor.core.CorePublisher;
 import reactor.core.publisher.Mono;
@@ -19,11 +21,20 @@ import reactor.core.publisher.Mono;
 public class WalletYankiHandler {
 
     private final SaveWalletYankiService saveWalletYankiService;
+    private final WalletYankiRepository walletYankiRepository;
+
+
 
     public Mono<ServerResponse> postWalletYanki(ServerRequest serverRequest) {
-        return serverRequest.bodyToMono(CreateAccountRequest.class)
-                .map(saveWalletYankiService::createAccount)
-                .flatMap(respuesta -> this.toServerResponse(respuesta, HttpStatus.CREATED));
+            return serverRequest.bodyToMono(CreateAccountRequest.class)
+                    .map(saveWalletYankiService::createAccount)
+                    .flatMap(respuesta -> this.toServerResponse(respuesta, HttpStatus.CREATED));
+
+    }
+
+    public Mono<ServerResponse> getYankiPhone(ServerRequest request) {
+        Mono<WalletYanki> yanki = walletYankiRepository.findByPhone(request.pathVariable("number"));
+        return this.toServerResponse(yanki, HttpStatus.OK);
     }
 
     public Mono<ServerResponse> postTransaction(ServerRequest serverRequest) {
@@ -31,8 +42,7 @@ public class WalletYankiHandler {
     }
 
     private Mono<ServerResponse> toServerResponse(CorePublisher<WalletYanki> yankiMono, HttpStatus status) {
-    	log.info("Antes de responder {}");
-
+    	log.info("==> Antes de responder {} "+yankiMono.toString());
         return ServerResponse
                 .status(status)
                 .contentType(MediaType.APPLICATION_JSON)

@@ -12,16 +12,26 @@ import reactor.core.publisher.Mono;
 @Repository
 @RequiredArgsConstructor
 @Slf4j
-public class WalletYankiReactiveMongoRepository implements WalletYankiRepository {
+public class WalletYankiReactiveMongoRepository implements WalletYankiRepository{
 
     private final IWalletYankiReactiveMongoRepository walletYankiReactiveMongoRepository;
 
     @Override
     public Mono<WalletYanki> save(WalletYanki walletYanki) {
-    	log.info("Dentro del repository {}", walletYanki);
+    	log.info("==> Dentro del repository {}", walletYanki);
         return walletYankiReactiveMongoRepository.save(new WalletYankiDao(walletYanki))
                 .map(WalletYankiDao::toWalletYanki)
-                .doOnNext(result -> log.info("Despues del map {}", result));
+                .doOnNext(result -> log.info( "==> Despues del map {}", result));
     }
+
+    @Override
+    public Mono<WalletYanki> findByPhone(String phone) {
+        log.info("==> llega a buscar {}", phone);
+        return walletYankiReactiveMongoRepository
+                .findByNumPhone(phone)
+                .map(WalletYankiDao::busquedaYanqui)
+                .doOnNext(result -> log.info( "==> llega a encontrar {}", result));
+    }
+
 
 }
