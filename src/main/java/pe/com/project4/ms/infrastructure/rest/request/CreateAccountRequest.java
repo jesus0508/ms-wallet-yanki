@@ -10,6 +10,7 @@ import pe.com.project4.ms.infrastructure.event.WalletAccountCreatedEvent;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateAccountRequest {
+
     private String names;
     private String paternalSurname;
     private String maternalSurname;

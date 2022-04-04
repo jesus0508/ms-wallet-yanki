@@ -21,4 +21,13 @@ public class WalletYanki {
         this.balance = BigDecimal.ZERO;
         this.createdAt = LocalDateTime.now();
     }
+
+    public void debitMoney(BigDecimal amount) {
+        balance = balance.subtract(amount);
+    }
+
+    public void creditMoney(BigDecimal amount) {
+        balance = balance.add(amount);
+    }
+
 }

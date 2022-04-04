@@ -16,6 +16,4 @@ public class WalletAccountCreatedEvent {
     private DocumentType documentType;
     private String phoneNumber;
     private String email;
-
-
 }
